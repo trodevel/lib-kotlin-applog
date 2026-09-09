@@ -2,6 +2,8 @@ package com.trodevel.applog
 
 enum class LogArea(val value: Int) {
     STOPSTART(1),
+    _FIRST(1),
+    _LAST(999),
     USER_DEFINED_1(1000),
     USER_DEFINED_2(1001),
     USER_DEFINED_3(1002),
