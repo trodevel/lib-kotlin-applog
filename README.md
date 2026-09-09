@@ -41,6 +41,7 @@ val appLogRepository = AppLogRepository.getInstance(context)
 ```kotlin
 import com.trodevel.applog.*
 
+// Use standard areas
 appLogRepository.log(
     area = LogArea.STOPSTART,
     level = LogLevel.INFO,
@@ -48,16 +49,32 @@ appLogRepository.log(
     functionName = "onStart",
     message = "Service started successfully"
 )
+
+// Or use user-defined areas for application-specific features
+val AI_ANALYSIS = LogArea.USER_DEFINED_1
+appLogRepository.log(
+    area = AI_ANALYSIS,
+    level = LogLevel.DEBUG,
+    type = LogDataType.STRING,
+    functionName = "analyze",
+    message = "Threshold exceeded"
+)
 ```
 
 ### 3. Retrieve logs
 
 ```kotlin
+// Filter by specific area
 val logs = appLogRepository.find(
     dateFrom = Date(System.currentTimeMillis() - 3600000), // Last hour
     area = LogArea.STOPSTART,
     maxMessages = 100
 )
+
+// Or filter using ranges (standard vs user-defined)
+val standardLogs = appLogRepository.find(dateFrom = yesterday).filter { 
+    it.logArea in LogArea._FIRST.value..LogArea._LAST.value 
+}
 ```
 
 ## Data Structure
@@ -65,6 +82,8 @@ val logs = appLogRepository.find(
 Each log entry contains:
 - `timestamp`: Epoch milliseconds.
 - `logArea`: Integer representing the category (from `LogArea` enum).
+    - **Standard Areas**: `1` to `999` (Markers: `_FIRST` to `_LAST`).
+    - **User Defined Areas**: `1000` to `1100` (`USER_DEFINED_1` to `USER_DEFINED_100`).
 - `logLevel`: Severity level (DEBUG, INFO, WARNING, ERROR).
 - `dataType`: Hint about the message content format (BOOL, INT, FLOAT, STRING).
 - `functionName`: The context or function where the log originated.
