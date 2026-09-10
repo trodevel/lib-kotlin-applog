@@ -3,6 +3,9 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
+group = "com.trodevel.applog"
+version = "1.1.0"
+
 android {
     namespace = "com.trodevel.applog"
     compileSdk = 35
